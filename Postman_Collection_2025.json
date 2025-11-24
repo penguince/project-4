@@ -1,0 +1,249 @@
+{
+	"info": {
+		"name": "CSC 436 - Project 4 - REST API (2025)",
+		"description": "Example Postman Collection for Project 4 - REST API with Express.js and LowDB\n\nUpdated for 2025:\n- Express 4.21.x\n- LowDB 7.x (ESM-only)\n- uuid 11.x+ (ESM-only)\n- Node.js 24 LTS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "0. API Info",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "3000",
+					"path": [""]
+				},
+				"description": "Get API documentation and available endpoints"
+			},
+			"response": []
+		},
+		{
+			"name": "1. Get All Games",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/games",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "3000",
+					"path": ["api", "games"]
+				},
+				"description": "Retrieve all games in the collection. Returns an array of all game objects.\n\nExpected Response:\n- Status: 200 OK\n- Body: { success: true, count: number, data: [] }"
+			},
+			"response": []
+		},
+		{
+			"name": "2. Get Single Game by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/games/:id",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "3000",
+					"path": ["api", "games", ":id"],
+					"variable": [
+						{
+							"key": "id",
+							"value": "paste-uuid-here",
+							"description": "Replace with actual game UUID from a POST response"
+						}
+					]
+				},
+				"description": "Retrieve a single game by its unique UUID.\n\nExpected Responses:\n- 200 OK: Game found\n- 400 Bad Request: Invalid UUID format\n- 404 Not Found: Game doesn't exist"
+			},
+			"response": []
+		},
+		{
+			"name": "3. Create New Game",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": "Required for JSON body"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"title\": \"The Legend of Zelda: Breath of the Wild\",\n  \"genre\": \"Action-Adventure\",\n  \"platform\": \"Nintendo Switch\",\n  \"releaseYear\": 2017\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/games",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "3000",
+					"path": ["api", "games"]
+				},
+				"description": "Create a new game.\n\nRequired fields:\n- title (string)\n- genre (string)\n\nOptional fields:\n- platform (string, defaults to 'Unknown')\n- releaseYear (number, defaults to current year)\n\nExpected Responses:\n- 201 Created: Game created successfully\n- 400 Bad Request: Missing required fields"
+			},
+			"response": []
+		},
+		{
+			"name": "4. Update Game",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": "Required for JSON body"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"platform\": \"Nintendo Switch & Wii U\",\n  \"releaseYear\": 2017\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/games/:id",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "3000",
+					"path": ["api", "games", ":id"],
+					"variable": [
+						{
+							"key": "id",
+							"value": "paste-uuid-here",
+							"description": "Replace with actual game UUID"
+						}
+					]
+				},
+				"description": "Update an existing game. Only include fields you want to update.\n\nExpected Responses:\n- 200 OK: Game updated successfully\n- 400 Bad Request: Invalid UUID format\n- 404 Not Found: Game doesn't exist"
+			},
+			"response": []
+		},
+		{
+			"name": "5. Delete Game",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/games/:id",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "3000",
+					"path": ["api", "games", ":id"],
+					"variable": [
+						{
+							"key": "id",
+							"value": "paste-uuid-here",
+							"description": "Replace with actual game UUID"
+						}
+					]
+				},
+				"description": "Delete a game by UUID. Returns the deleted game object.\n\nExpected Responses:\n- 200 OK: Game deleted successfully\n- 400 Bad Request: Invalid UUID format\n- 404 Not Found: Game doesn't exist"
+			},
+			"response": []
+		},
+		{
+			"name": "BONUS: Filter by Genre",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/games?genre=adventure",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "3000",
+					"path": ["api", "games"],
+					"query": [
+						{
+							"key": "genre",
+							"value": "adventure",
+							"description": "Filter games by genre (case-insensitive, partial match)"
+						}
+					]
+				},
+				"description": "OPTIONAL: Filter games by genre using query parameters.\n\nThe filter is case-insensitive and supports partial matches."
+			},
+			"response": []
+		},
+		{
+			"name": "BONUS: Filter by Platform",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/games?platform=switch",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "3000",
+					"path": ["api", "games"],
+					"query": [
+						{
+							"key": "platform",
+							"value": "switch",
+							"description": "Filter games by platform (case-insensitive, partial match)"
+						}
+					]
+				},
+				"description": "OPTIONAL: Filter games by platform using query parameters.\n\nThe filter is case-insensitive and supports partial matches."
+			},
+			"response": []
+		},
+		{
+			"name": "ERROR: Invalid UUID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/games/not-a-valid-uuid",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "3000",
+					"path": ["api", "games", "not-a-valid-uuid"]
+				},
+				"description": "Test error handling for invalid UUID format.\n\nExpected Response:\n- 400 Bad Request"
+			},
+			"response": []
+		},
+		{
+			"name": "ERROR: Game Not Found",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/games/550e8400-e29b-41d4-a716-446655440000",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "3000",
+					"path": ["api", "games", "550e8400-e29b-41d4-a716-446655440000"]
+				},
+				"description": "Test error handling for non-existent game.\n\nExpected Response:\n- 404 Not Found"
+			},
+			"response": []
+		},
+		{
+			"name": "ERROR: Missing Required Fields",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"platform\": \"Switch\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/games",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "3000",
+					"path": ["api", "games"]
+				},
+				"description": "Test validation error for missing required fields (title and genre).\n\nExpected Response:\n- 400 Bad Request"
+			},
+			"response": []
+		}
+	]
+}
